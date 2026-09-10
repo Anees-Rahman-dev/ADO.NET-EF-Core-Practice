@@ -36,7 +36,7 @@ namespace ADOWEEK2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStudent(int id, Student student)
         {
-            var IsStudentExist = await _context.Students.FindAsync(id);
+            var IsStudentExist = await _context.Students.FindAsync(id);// used to find an entity by its primary key value
 
             if (IsStudentExist == null)
             {
@@ -51,6 +51,25 @@ namespace ADOWEEK2.Controllers
             await _context.SaveChangesAsync();
             return Ok(IsStudentExist);
 
+        }
+
+        [HttpDelete("{id}")]
+
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            var IsStudentEXist = await _context.Students.FindAsync(id);
+
+            if (IsStudentEXist == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Students.Remove(IsStudentEXist);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok("STUDENT HAS DELETED");
         }
 
     }
