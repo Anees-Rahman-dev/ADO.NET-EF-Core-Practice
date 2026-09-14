@@ -72,5 +72,37 @@ namespace ADOWEEK2.Controllers
             return Ok("STUDENT HAS DELETED");
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var IsStudentExist = _context.Students.FindAsync(id);
+
+            if (IsStudentExist == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(IsStudentExist);
+            }
+        }
+        [HttpDelete("less-age")]
+
+        public async Task<IActionResult> DeleteStudentsWithLessAge()
+        {
+            var StudentsWLessAge = await _context.Students.Where(F => F.Age >= 18).ToListAsync();
+
+            if (!StudentsWLessAge.Any())
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Students.RemoveRange(StudentsWLessAge);
+                await _context.SaveChangesAsync();
+                return Ok(StudentsWLessAge);
+            }
+        } 
+
     }
 }
